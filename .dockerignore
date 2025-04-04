@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.docker
+
+# Python
+**/__pycache__/
+**/.venv/
+**/.env
+.env.*
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Local development settings
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Database
+*.sqlite3
+
+# Media files (should be stored in external storage)
+media/
+
+# Local .DS_Store files
+.DS_Store
+
+# Node modules
+node_modules/ 

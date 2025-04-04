@@ -1,0 +1,46 @@
+# Configuration for deployment on Render
+
+databases:
+  - name: gamify_db
+    databaseName: gamify
+    user: gamify
+    plan: free
+
+services:
+  - type: web
+    name: gamify
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: gunicorn gamify.wsgi:application
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gamify_db
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: WEB_CONCURRENCY
+        value: 4
+
+# Optional: Scheduled job for notification cleanup
+jobs:
+  - name: notification-cleanup
+    schedule: "0 0 * * *"  # Run at midnight every day (cron syntax)
+    buildCommand: pip install -r requirements.txt
+    startCommand: python cleanup_notifications.py
+    env: python
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gamify_db
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        fromService:
+          name: gamify
+          type: web
+          envVarKey: DJANGO_SECRET_KEY

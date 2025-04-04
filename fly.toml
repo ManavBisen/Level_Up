@@ -1,0 +1,23 @@
+app = "level-up-app"
+primary_region = "iad"  # Change to your preferred region
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[experimental]
+  auto_rollback = true
+
+[env]
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[statics]]
+  guest_path = "/app/staticfiles"
+  url_prefix = "/static" 

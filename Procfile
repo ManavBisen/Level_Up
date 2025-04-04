@@ -1,0 +1,1 @@
+web: gunicorn Level_Up.wsgi --log-file - 
